@@ -1,7 +1,6 @@
 
 plugins {
     kotlin("jvm") version "1.8.21"
-    application
 }
 
 // atomicfu
@@ -33,8 +32,4 @@ tasks.test {
 
 kotlin {
     jvmToolchain(11)
-}
-
-application {
-    mainClass.set("MainKt")
 }
