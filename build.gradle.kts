@@ -1,16 +1,7 @@
 
 plugins {
     kotlin("jvm") version "1.8.21"
-    application
 }
-
-// atomicfu
-buildscript {
-    dependencies {
-        classpath("org.jetbrains.kotlinx:atomicfu-gradle-plugin:0.21.0")
-    }
-}
-apply(plugin = "kotlinx-atomicfu")
 
 group = "org.example"
 version = "1.0-SNAPSHOT"
@@ -33,8 +24,4 @@ tasks.test {
 
 kotlin {
     jvmToolchain(11)
-}
-
-application {
-    mainClass.set("MainKt")
 }
