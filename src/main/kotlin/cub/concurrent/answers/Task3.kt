@@ -4,9 +4,9 @@ import java.util.concurrent.ConcurrentLinkedQueue
 import kotlin.concurrent.thread
 
 fun<T> Collection<T>.parallelForEach(nThreads: Int, block: (T) -> Unit) {
-    require(nThreads > 0)
+    require(nThreads > 0) { "The number of threads must be > 0" }
     val queue = ConcurrentLinkedQueue(this)
-    val threadPool = (0 until nThreads).map { i ->
+    val threadPool = (0 until nThreads).map { _ ->
         thread {
             while (true) {
                 block(queue.poll() ?: return@thread)

@@ -1,8 +1,5 @@
 package cub.concurrent.tasks
 
-import java.util.concurrent.ConcurrentLinkedQueue
-import kotlin.concurrent.thread
-
 /*
  * Implement parallel version of forEach function, which applies given lambda to all elements of the collection.
  * Your implementation should distribute the work between threads dynamically.
@@ -13,7 +10,7 @@ import kotlin.concurrent.thread
  *
  */
 fun<T> Collection<T>.parallelForEach(nThreads: Int, block: (T) -> Unit) {
-    require(nThreads > 0)
+    require(nThreads > 0) { "The number of threads must be > 0" }
     TODO()
 }
 
