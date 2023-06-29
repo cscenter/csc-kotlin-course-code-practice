@@ -3,6 +3,7 @@
 A repository with small coding tasks for the Kotlin course:
 
 - [functional programming](./src/main/kotlin/cub/fp)
+- [parallel & concurrent programming](./src/main/kotlin/cub/concurrent)
 
 In the folder with tasks you will find two nested folders: `tasks` and `answers`. 
 The `tasks` folder contains several small tasks that should be done. 
