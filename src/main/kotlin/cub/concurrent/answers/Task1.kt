@@ -4,6 +4,7 @@ import java.util.concurrent.atomic.*
 import java.util.concurrent.locks.*
 import kotlin.concurrent.*
 import kotlin.random.*
+import kotlin.math.*
 
 // Solution using lock
 fun List<Int>.parallelSum(nThreads: Int): Int {
@@ -15,7 +16,8 @@ fun List<Int>.parallelSum(nThreads: Int): Int {
         return sum()
     var sum = 0
     val lock = ReentrantLock()
-    chunked(nThreads)
+    val chunkSize = ceil(size.toDouble() / nThreads).toInt()
+    chunked(chunkSize)
         .map {
             thread {
                 val chunkSum = it.sum()
@@ -36,7 +38,8 @@ fun List<Int>.parallelSumAtomic(nThreads: Int): Int {
     if (nThreads == 1)
         return sum()
     val sum = AtomicInteger(0)
-    chunked(nThreads)
+    val chunkSize = ceil(size.toDouble() / nThreads).toInt()
+    chunked(chunkSize)
         .map {
             thread {
                 sum.addAndGet(it.sum())
@@ -60,7 +63,7 @@ fun main() {
         while (true) {
             yield(Random.nextInt() % 100)
         }
-    }.take(16).toList()
+    }.take(40).toList()
 
     check(randomList.parallelSum(nThreads = 4) == randomList.sum())
 }
