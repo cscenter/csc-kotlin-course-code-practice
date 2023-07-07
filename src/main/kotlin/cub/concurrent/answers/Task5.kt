@@ -30,18 +30,18 @@ class TransactionalBankAccount : BankAccount {
     override val balance: Int
         get() = account.get().balance
 
-    fun <T> transaction(block: BankAccount.() -> T): T {
-        var result: T
+    fun transaction(block: BankAccount.() -> Boolean): Boolean {
         do {
             val currentAccount = account.get()
             val newAccount = currentAccount.copy()
-            result = block(newAccount)
+            if (!block(newAccount))
+                return false
         } while (!account.compareAndSet(currentAccount, newAccount))
-        return result
+        return true
     }
 
     override fun deposit(amount: Int) {
-        transaction { deposit(amount) }
+        transaction { deposit(amount); true }
     }
 
     override fun withdraw(amount: Int): Boolean {
@@ -55,6 +55,16 @@ fun TransactionalBankAccount.buyWithCashback(price: Int, cashbackPercentage: Int
         deposit(cashback)
         true
     } else false
+}
+
+fun transactionalBankAccountTest0() {
+    val account = TransactionalBankAccount()
+    account.deposit(1_500)
+    account.transaction {
+        withdraw(1_000)
+        withdraw(1_000)
+    }
+    check(account.balance == 1_500)
 }
 
 fun transactionalBankAccountTest1() {
@@ -110,6 +120,7 @@ fun transactionalBankAccountTest3() {
 }
 
 fun main() {
+    transactionalBankAccountTest0()
     transactionalBankAccountTest1()
     transactionalBankAccountTest2()
     transactionalBankAccountTest3()

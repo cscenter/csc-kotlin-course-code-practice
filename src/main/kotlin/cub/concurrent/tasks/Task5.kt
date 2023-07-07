@@ -48,18 +48,28 @@ class TransactionalBankAccount : BankAccount {
     override val balance: Int
         get() = TODO()
 
-    fun <T> transaction(block: BankAccount.() -> T): T {
+    fun transaction(block: BankAccount.() -> Boolean): Boolean {
         TODO()
     }
 
     override fun deposit(amount: Int) {
-        transaction { deposit(amount) }
+        transaction { deposit(amount); true }
     }
 
     override fun withdraw(amount: Int): Boolean {
         return transaction { withdraw(amount) }
     }
 
+}
+
+fun transactionalBankAccountTest0() {
+    val account = TransactionalBankAccount()
+    account.deposit(1_500)
+    account.transaction {
+        withdraw(1_000)
+        withdraw(1_000)
+    }
+    check(account.balance == 1_500)
 }
 
 fun transactionalBankAccountTest1() {
@@ -115,6 +125,7 @@ fun transactionalBankAccountTest3() {
 }
 
 fun main() {
+    transactionalBankAccountTest0()
     transactionalBankAccountTest1()
     transactionalBankAccountTest2()
     transactionalBankAccountTest3()
