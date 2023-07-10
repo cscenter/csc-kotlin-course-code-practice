@@ -113,7 +113,7 @@ fun transactionalBankAccountTest3() {
         account.buyWithCashback(5_000, 5)
     }
     val t3 = thread {
-        account.buyWithCashback(10_000, 5)
+        account.buyWithCashback(20_000, 5)
     }
     t1.join(); t2.join(); t3.join()
     check(account.balance == 4_450)
