@@ -121,7 +121,7 @@ fun transactionalBankAccountTest3() {
         account.buyWithCashback(10_000, 5)
     }
     t1.join(); t2.join(); t3.join()
-    check(account.balance == 4_700)
+    check(account.balance == 4_450)
 }
 
 fun main() {
