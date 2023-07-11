@@ -2,10 +2,8 @@ package cub.async.answers
 
 import cub.async.tasks.Server
 import cub.async.tasks.posts
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
+import java.lang.Runnable
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
@@ -47,19 +45,17 @@ fun threadsSolution() {
 }
 
 fun coroutinesSolution() {
-    val scope = CoroutineScope(Dispatchers.IO)
-    val job = scope.launch {
-        for (text in posts) {
-            launch {
-                val token = suspendCoroutine { it.resume(Server.getToken()) }
-                val meta = suspendCoroutine { it.resume(Server.submitPost(text, token)) }
+    runBlocking {
+        coroutineScope {
+            for (text in posts) {
+                launch(Dispatchers.IO) {
+                    val token = suspendCoroutine { it.resume(Server.getToken()) }
+                    val meta = suspendCoroutine { it.resume(Server.submitPost(text, token)) }
+                }
             }
         }
     }
-     runBlocking {
-         job.join()
-         println("All posts processed")
-     }
+    println("All posts processed")
 }
 
 fun main() {
