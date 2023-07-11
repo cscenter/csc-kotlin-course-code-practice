@@ -1,10 +1,11 @@
 package cub.async.answers
 
 import cub.async.tasks.Task1
+import cub.async.tasks.testSolution
 import kotlinx.coroutines.*
 import kotlin.concurrent.thread
 
-class Solution1<T : Comparable<T>> : Task1<T> {
+open class Solution1<T : Comparable<T>> : Task1<T> {
 
     private fun partition(arr: MutableList<T>, l: Int, r: Int): Pair<Int, Int> {
         val pivot = arr[l]
@@ -67,5 +68,24 @@ class Solution1<T : Comparable<T>> : Task1<T> {
         val (ml, mr) = partition(arr, l, r)
         launch { quickSortAsync(arr, l, ml) }
         launch { quickSortAsync(arr, mr, r) }
+    }
+}
+
+class AlternativeSolution1<T : Comparable<T>> : Solution1<T>() {
+    override fun quickSortAsync(arr: MutableList<T>) {
+        runBlocking {
+            coroutineScope {
+                quickSortAsync(arr, 0, arr.size)
+            }
+        }
+    }
+}
+
+fun main() {
+    repeat(10) {
+        val solution1: Task1<Int> = Solution1()
+        testSolution(solution1)
+        val solution2: Task1<Int> = AlternativeSolution1()
+        testSolution(solution2)
     }
 }
