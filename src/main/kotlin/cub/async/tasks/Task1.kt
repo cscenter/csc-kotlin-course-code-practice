@@ -1,8 +1,14 @@
 package cub.async.tasks
 
-import cub.async.answers.Solution1
 import kotlin.random.Random
 import kotlin.system.measureTimeMillis
+
+/*
+ * The task is to implement QuickSort algorithm in 3 ways:
+ * - Classic
+ * - Parallel
+ * - Asynchronous (using coroutines)
+ */
 
 interface Task1<T : Comparable<T>> {
     fun quickSort(arr: MutableList<T>)
@@ -46,6 +52,6 @@ fun testQuickSort(sorter: (MutableList<Int>) -> Unit, iterations: Int = 300, lis
 }
 
 fun main() {
-    val solution = Solution1<Int>()
+    val solution: Task1<Int> = TODO()
     testSolution(solution)
 }
