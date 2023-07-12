@@ -20,7 +20,7 @@ fun getWorkers(): ExecutorService {
 fun solutionUsingAsync() {
     val myAsync = MyAsyncFramework()
     for (text in posts) {
-        myAsync.async({ Server.getToken()}) { token ->
+        myAsync.async({ Server.getToken() }) { token ->
             Server.submitPost(text, token)
         }
     }
@@ -44,13 +44,19 @@ fun threadsSolution() {
     println("All posts processed")
 }
 
+suspend fun submitPostNicely(text: String, token: Server.Token) =
+    withContext(Dispatchers.IO) {
+        Server.submitPost(text, token)
+    }
+
 fun coroutinesSolution() {
     runBlocking {
         coroutineScope {
             for (text in posts) {
                 launch(Dispatchers.IO) {
                     val token = suspendCoroutine { it.resume(Server.getToken()) }
-                    val meta = suspendCoroutine { it.resume(Server.submitPost(text, token)) }
+                    val meta = submitPostNicely(text, token)
+                    // val meta = suspendCoroutine { it.resume(Server.submitPost(text, token)) }
                 }
             }
         }

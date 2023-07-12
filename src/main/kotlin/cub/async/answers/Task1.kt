@@ -67,7 +67,7 @@ open class Solution1<T : Comparable<T>> : Task1<T> {
         if (l >= r) return
         val (ml, mr) = partition(arr, l, r)
         launch { quickSortAsync(arr, l, ml) }
-        launch { quickSortAsync(arr, mr, r) }
+        quickSortAsync(arr, mr, r)
     }
 }
 
